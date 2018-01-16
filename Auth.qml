@@ -12,8 +12,8 @@ Rectangle {
     id:popup
     color:"white"
     border.color:"gray"
-    border.width:10
-    radius:8
+    border.width:4
+    radius:2
 
     states: [
         State {
@@ -108,6 +108,20 @@ Rectangle {
             onTextChanged: useremail = text
         }
 
+        Text {
+            text:"Passphrase"
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.pixelSize: parent.width * 0.03
+        }
+
+        TextField {
+            anchors.horizontalCenter: parent.horizontalCenter
+            id:passphrase
+            width:parent.width * 0.80
+           // text:useremail
+           // onTextChanged: useremail = text
+        }
+
     }
 
     Rectangle {
@@ -131,7 +145,7 @@ Rectangle {
             hoverEnabled: true
             onEntered: okay.color = "gray",okaytext.color = "white"
             onExited: okay.color = "white",okaytext.color = "black"
-            onClicked: if(username.length > 2 && useremail.length > 2) {OpenSeed.oseed_auth(username,useremail),popup.state = "Hide"}
+            onClicked: if(username.length > 2 && useremail.length > 2) {OpenSeed.oseed_auth(username,useremail,passphrase.text),popup.state = "Hide"}
         }
     }
 
@@ -162,9 +176,41 @@ Rectangle {
     }
 
     Image {
-        anchors.centerIn: parent
-        source:"graphics/infoborder.png"
-        width:parent.width
-        height:parent.height
+        //anchors.centerIn: parent
+        source:"graphics/bordernew.png"
+        //width:parent.width
+        //height:parent.height
+        x:0
+        y:0
     }
+
+    Image {
+        //anchors.centerIn: parent
+        source:"graphics/bordernew.png"
+        //width:parent.width
+        //height:parent.height
+        x:parent.width-width
+        y:0
+        rotation:90
+    }
+
+    Image {
+        //anchors.centerIn: parent
+        source:"graphics/bordernew.png"
+        //width:parent.width
+        //height:parent.height
+        x:0
+        y:parent.height-height
+        rotation:270
+    }
+    Image {
+        //anchors.centerIn: parent
+        source:"graphics/bordernew.png"
+        //width:parent.width
+        //height:parent.height
+        x:parent.width-width
+        y:parent.height-height
+        rotation:180
+    }
+
 }

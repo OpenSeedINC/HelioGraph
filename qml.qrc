@@ -63,5 +63,8 @@
         <file>graphics/M_ESRB.png</file>
         <file>graphics/NumNom-add.png</file>
         <file>graphics/T_ESRB.png</file>
+        <file>graphics/bordernew.png</file>
+        <file>graphics/bordernew-10.png</file>
+        <file>graphics/bordernew-25.png</file>
     </qresource>
 </RCC>

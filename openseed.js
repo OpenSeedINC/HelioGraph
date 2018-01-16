@@ -1,11 +1,11 @@
 var updateinterval = 2000;
 var fullnumber = 0;
 
-function oseed_auth(name,email) {
+function oseed_auth(name,email,passphrase) {
 
     var http = new XMLHttpRequest();
     //var url = "http://openseed.vagueentertainment.com/corescripts/auth.php?devid=" + devId + "&appid=" + appId + "&username="+ name + "&email=" + email ;
-    var url = "http://openseed.vagueentertainment.com/corescripts/authPOST.php";
+    var url = "https://openseed.vagueentertainment.com:8675/corescripts/authPOST.php";
    // console.log(url)
     http.onreadystatechange = function() {
         if (http.readyState == 4) {
@@ -26,7 +26,7 @@ function oseed_auth(name,email) {
     http.open('POST', url.trim(), true);
     //http.send(null);
     http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    http.send("devid=" + devId + "&appid=" + appId + "&username="+ name + "&email=" + email);
+    http.send("devid=" + devId + "&appid=" + appId + "&username="+ name + "&email=" + email + "&passphrase=" + passphrase);
 
     //be sure to remove this when the internet is back and before we distribute//
     //id = "00010101";
@@ -166,7 +166,7 @@ function accountlist() {
 function heartbeat() {
 
     var http = new XMLHttpRequest();
-    var url = "http://openseed.vagueentertainment.com/corescripts/heartbeat.php";
+    var url = "https://openseed.vagueentertainment.com:8675/corescripts/heartbeat.php";
    // console.log(url)
 
     http.onreadystatechange = function() {
@@ -209,7 +209,7 @@ function heartbeat() {
 function sendimage(userid,file,effect,comment,date,private) {
 
     var http = new XMLHttpRequest();
-    var url = "http://openseed.vagueentertainment.com/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
+    var url = "https://openseed.vagueentertainment.com:8675/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
 
     //var sending = file.split(":;:")[0];
     var retrieved;
@@ -258,7 +258,7 @@ function sendimage(userid,file,effect,comment,date,private) {
 function retrievedata(type,serverhas) {
 
     var http = new XMLHttpRequest();
-    var url = "http://openseed.vagueentertainment.com/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
+    var url = "https://openseed.vagueentertainment.com:8675/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
 
     //console.log("OpenSeed.js "+childname,account);
    // console.log(url)
@@ -335,7 +335,7 @@ function retrievedata(type,serverhas) {
 function sync_library() {
 
     var http = new XMLHttpRequest();
-    var url = "http://openseed.vagueentertainment.com/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
+    var url = "https://openseed.vagueentertainment.com:8675/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
 
 
     gc();
@@ -461,7 +461,7 @@ function sync_library() {
 function social_stream(tags,not,search) {
 
     var http = new XMLHttpRequest();
-    var url = "http://openseed.vagueentertainment.com/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
+    var url = "https://openseed.vagueentertainment.com:8675/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
 
     //console.log("OpenSeed.js "+childname,account);
     //console.log(url)
@@ -723,7 +723,7 @@ function update_index(file,effect,date,retrieved) {
 
 function get_eula() {
     var http = new XMLHttpRequest();
-    var url = "http://vagueentertainment.com/standard-license.html"
+    var url = "https://vagueentertainment.com/standard-license.html"
 
     db.transaction(function(tx) {
     tx.executeSql('CREATE TABLE IF NOT EXISTS announcements (id TEXT, name TEXT,type TEXT,version INT,seen INT)');
@@ -748,7 +748,7 @@ function get_eula() {
 
 function get_news(log) {
     var http = new XMLHttpRequest();
-    var url = "http://vagueentertainment.com/"+log+".html"
+    var url = "https://vagueentertainment.com/"+log+".html"
 
     db.transaction(function(tx) {
     tx.executeSql('CREATE TABLE IF NOT EXISTS announcements (id TEXT, name TEXT,type TEXT,version INT,seen INT)');
@@ -807,7 +807,7 @@ function privacy_update(index,type) {
 
 
     var http = new XMLHttpRequest();
-    var url = "http://openseed.vagueentertainment.com/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
+    var url = "https://openseed.vagueentertainment.com:8675/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
 
     //var sending = file.split(":;:")[0];
     var retrieved;
@@ -849,7 +849,7 @@ function privacy_update(index,type) {
 function send_comment(theindex,statement) {
 
     var http = new XMLHttpRequest();
-    var url = "http://openseed.vagueentertainment.com/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
+    var url = "https://openseed.vagueentertainment.com:8675/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
 
     //var sending = file.split(":;:")[0];
     var retrieved;
@@ -896,7 +896,7 @@ function send_comment(theindex,statement) {
 function load_comments(theindex) {
 
    var http = new XMLHttpRequest();
-    var url = "http://openseed.vagueentertainment.com/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
+    var url = "https://openseed.vagueentertainment.com:8675/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
 
     //var sending = file.split(":;:")[0];
     var retrieved;
@@ -961,7 +961,7 @@ function likes(index,like,likes) {
 
 
     var http = new XMLHttpRequest();
-     var url = "http://openseed.vagueentertainment.com/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
+     var url = "https://openseed.vagueentertainment.com:8675/devs/Vag-01001011/vagHeG-0630/scripts/sync.php";
 
      //var sending = file.split(":;:")[0];
      var retrieved;

@@ -151,11 +151,49 @@ Item {
         }
     }
 
-    Image {
+   /* Image {
         anchors.centerIn: parent
         width:parent.width * 1.01
         height:parent.height * 1.01
         source:"graphics/infoborder.png"
+    } */
+
+    Image {
+        //anchors.centerIn: parent
+        source:"graphics/bordernew.png"
+        //width:parent.width
+        //height:parent.height
+        x:0
+        y:0
+    }
+
+    Image {
+        //anchors.centerIn: parent
+        source:"graphics/bordernew.png"
+        //width:parent.width
+        //height:parent.height
+        x:parent.width-width
+        y:0
+        rotation:90
+    }
+
+    Image {
+        //anchors.centerIn: parent
+        source:"graphics/bordernew.png"
+        //width:parent.width
+        //height:parent.height
+        x:0
+        y:parent.height-height
+        rotation:270
+    }
+    Image {
+        //anchors.centerIn: parent
+        source:"graphics/bordernew.png"
+        //width:parent.width
+        //height:parent.height
+        x:parent.width-width
+        y:parent.height-height
+        rotation:180
     }
 
 

@@ -182,14 +182,65 @@ Flipable {
         }
 
 
-        Image {
+      /*  Image {
             id:imgborder
             source: "graphics/imageborder.png"
 
             height: frontimage.height * 1.05
             width: frontimage.width * 1.12
             anchors.centerIn: frontimage
-         }
+         } */
+
+
+
+        Image {
+            //anchors.centerIn: parent
+            source:"graphics/bordernew.png"
+            //width:parent.width
+            //height:parent.height
+            x:0
+            y:0
+            fillMode:Image.PreserveAspectFit
+            width:parent.width * 0.1
+        }
+
+        Image {
+            //anchors.centerIn: parent
+            source:"graphics/bordernew.png"
+            //width:parent.width
+            //height:parent.height
+            x:parent.width-width
+            y:0
+            fillMode:Image.PreserveAspectFit
+            width:parent.width * 0.1
+            rotation:90
+        }
+
+        Image {
+            //anchors.centerIn: parent
+            source:"graphics/bordernew.png"
+            //width:parent.width
+            //height:parent.height
+            x:0
+           // y:parent.height-height
+
+            y:frontimage.height-height
+            fillMode:Image.PreserveAspectFit
+            width:parent.width * 0.1
+
+            rotation:270
+        }
+        Image {
+            //anchors.centerIn: parent
+            source:"graphics/bordernew.png"
+            //width:parent.width
+            //height:parent.height
+            x:parent.width-width
+            y:frontimage.height-height
+            fillMode:Image.PreserveAspectFit
+            width:parent.width * 0.1
+            rotation:180
+        }
 
 
 

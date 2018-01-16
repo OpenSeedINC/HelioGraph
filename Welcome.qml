@@ -1,5 +1,5 @@
 import QtQuick 2.4
-import Ubuntu.Components 1.3
+import QtQuick.Controls 2.2
 import "main.js" as Scripts
 import "openseed.js" as OpenSeed
 import "slides.js" as Slides
@@ -223,9 +223,40 @@ Rectangle {
     }
 
     Image {
-        anchors.centerIn: parent
-        width:parent.width * 1.01
-        height:parent.height * 1.01
-        source:"graphics/infoborder.png"
+        //anchors.centerIn: parent
+        source:"graphics/bordernew.png"
+        //width:parent.width
+        //height:parent.height
+        x:0
+        y:0
+    }
+
+    Image {
+        //anchors.centerIn: parent
+        source:"graphics/bordernew.png"
+        //width:parent.width
+        //height:parent.height
+        x:parent.width-width
+        y:0
+        rotation:90
+    }
+
+    Image {
+        //anchors.centerIn: parent
+        source:"graphics/bordernew.png"
+        //width:parent.width
+        //height:parent.height
+        x:0
+        y:parent.height-height
+        rotation:270
+    }
+    Image {
+        //anchors.centerIn: parent
+        source:"graphics/bordernew.png"
+        //width:parent.width
+        //height:parent.height
+        x:parent.width-width
+        y:parent.height-height
+        rotation:180
     }
 }

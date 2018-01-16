@@ -286,7 +286,8 @@ Window {
     Auth {
         id:os_connect
 
-        width:parent.width * 0.9
+        width:if(parent.width > parent.height) {parent.width * 0.9} else {parent.width * 0.4}
+
         height:parent.height * 0.7
         anchors.centerIn: parent
 
