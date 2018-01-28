@@ -5,6 +5,7 @@ Item {
     property string thecomment:""
     property string thename:""
     property string theavatar:""
+    height:commentblock.height * 4.1
 
 
 
@@ -12,7 +13,7 @@ Item {
         //anchors.fill:parent
         anchors.centerIn: parent
         width:parent.width * 0.98
-        height:parent.height * 0.80
+        height:parent.height * 1
         radius:8
         border.color:"black"
         color:"white"
@@ -20,23 +21,27 @@ Item {
 
 
         Text {
+            id:commentor
             anchors.top:parent.top
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.margins:parent.height * 0.02
             text:thename+":"
-            font.pointSize: parent.height / 5
+            font.pointSize: if(mainView.height > 0) {mainView.height * 0.025} else {8}
         }
 
         Text {
-            anchors.bottom:parent.bottom
-            anchors.left:parent.left
-            width:parent.width
-            height:parent.height *0.80
+            id:commentblock
+            anchors.top:commentor.bottom
+            anchors.topMargin:mainView.height * 0.008
+            //anchors.bottom:parent.bottom
+            anchors.right:parent.right
+            width:parent.width - avatarback.width
+            //height:parent.height *0.80
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             wrapMode:Text.WordWrap
             text:thecomment
-            font.pointSize: parent.height / 4
+            font.pointSize: if(mainView.height > 0) {mainView.height * 0.015} else {8}
 
         }
 
@@ -50,18 +55,19 @@ Item {
     }
 
     Rectangle {
+        id:avatarback
         anchors.left:parent.left
         anchors.top:parent.top
-        width:parent.height / 1.4
-        height:parent.height / 1.4
+        width:mainView.height * 0.1
+        height:mainView.height * 0.1
         border.color:"black"
         color:"#4e4e4e"
 
 
         Image {
             anchors.centerIn: parent
-            width:parent.width * 0.98
-            height:parent.height * 0.98
+            width:mainView.height * 0.1
+            height:mainView.height * 0.1
             source:theavatar
         }
 

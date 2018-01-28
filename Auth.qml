@@ -1,5 +1,5 @@
-import QtQuick 2.4
-import QtQuick.Controls 1.2
+import QtQuick 2.2
+import QtQuick.Controls 2.2
 import "main.js" as Scripts
 import "openseed.js" as OpenSeed
 
@@ -12,8 +12,13 @@ Rectangle {
     id:popup
     color:"white"
     border.color:"gray"
-    border.width:4
-    radius:2
+    border.width:10
+    radius:8
+
+    property int uniquename: 8
+    property int uniqueid: 8
+    property string passphrase: ""
+
 
     states: [
         State {
@@ -21,6 +26,7 @@ Rectangle {
             PropertyChanges {
                 target:popup
                 visible:true
+                enabled:true
             }
         },
         State {
@@ -28,12 +34,54 @@ Rectangle {
             PropertyChanges {
                     target:popup
                     visible:false
+                    enabled:false
             }
         }
 
 
     ]
     state:"Hide"
+
+
+
+    Timer {
+        id:checkname
+        running:false
+        repeat:false
+        interval: 1000
+        onTriggered: OpenSeed.checkcreds("username",osUsername.trim());
+
+    }
+
+    Timer {
+        id:checkemail
+        running:false
+        repeat:false
+        interval: 1000
+        onTriggered: OpenSeed.checkcreds("email",osEmail.trim());
+
+
+    }
+
+    Timer {
+        id:checkpassword
+        running:false
+        repeat:false
+        interval: 1000
+        onTriggered: OpenSeed.checkcreds("passphrase",osUsername+","+osEmail+","+osPassphrase);
+
+    }
+
+    Timer {
+        id:checkexists
+        running:false
+        repeat:false
+        interval: 1000
+        onTriggered: if(osUsername.length > 1 && osEmail.length > 1) {OpenSeed.checkcreds("account",osUsername+","+osEmail);}
+    }
+
+
+
 
     Image {
         anchors.fill:parent
@@ -46,13 +94,13 @@ Rectangle {
 
     Column {
         anchors.top: parent.top
-        anchors.topMargin:parent.height * 0.01
+        anchors.topMargin:parent.height * 0.04
         width:parent.width
 
-        spacing:13
+        spacing:parent.height * 0.05
 
         Text {
-            text:"OpenSeed Connect"
+            text:qsTr("OpenSeed Connect")
             anchors.horizontalCenter: parent.horizontalCenter
             font.pixelSize: parent.width * 0.07
         }
@@ -65,7 +113,7 @@ Rectangle {
         }
 
         Text {
-            text:"Creating a sync account will allow you to use multiple devices, or to have multiple users accessing the same tasks."
+            text:qsTr("Create an account on our servers to use the service.")
             width:parent.width * 0.90
             wrapMode: Text.WordWrap
             x:parent.width * 0.05
@@ -80,46 +128,53 @@ Rectangle {
         }
 
         Text {
-            text:"User Name"
+            text:switch(uniquename) {
+                 case 0:qsTr("In Use");break;
+                 case 1:qsTr("Available");break;
+                 case 2:if(username.length > 2) {qsTr("Welcome Back")} else {qsTr("No User Name")};break;
+                 default:qsTr("No User Name");break;
+                 }
+            color:switch(uniquename) {
+                  case 0:"Red";break;
+                  case 1:"Black";break;
+                  case 2:"Black";break;
+                  default:break;
+                  }
+
             anchors.horizontalCenter: parent.horizontalCenter
-            font.pixelSize: parent.width * 0.03
+            font.pixelSize: parent.width * 0.06
+
         }
 
         TextField {
             anchors.horizontalCenter: parent.horizontalCenter
             id:usernametext
             width:parent.width * 0.80
+            placeholderText:qsTr("User Name")
             text:username
-            onTextChanged: username = text
+            onTextChanged:username = text,OpenSeed.checkcreds(username,useremail);
 
         }
 
-        Text {
-            text:"Email Address"
-            anchors.horizontalCenter: parent.horizontalCenter
-            font.pixelSize: parent.width * 0.03
-        }
+
 
         TextField {
             anchors.horizontalCenter: parent.horizontalCenter
             id:emailnametext
             width:parent.width * 0.80
+            placeholderText: qsTr("Email")
             text:useremail
-            onTextChanged: useremail = text
-        }
-
-        Text {
-            text:"Passphrase"
-            anchors.horizontalCenter: parent.horizontalCenter
-            font.pixelSize: parent.width * 0.03
+            onTextChanged: useremail = text,OpenSeed.checkcreds(username,useremail);
         }
 
         TextField {
             anchors.horizontalCenter: parent.horizontalCenter
-            id:passphrase
+            id:passphrasetext
             width:parent.width * 0.80
-           // text:useremail
-           // onTextChanged: useremail = text
+            placeholderText: qsTr("Passphrase")
+            text:passphrase
+            echoMode: TextInput.Password
+            onTextChanged: passphrase = text,OpenSeed.checkcreds(username,useremail);
         }
 
     }
@@ -136,7 +191,7 @@ Rectangle {
 
         Text {
             id:okaytext
-            text:"Okay"
+            text:if(uniquename == 2 && username.length > 2) {qsTr("Login");} else {qsTr("Okay");}
             font.pixelSize: parent.height / 2
             anchors.centerIn: parent
         }
@@ -145,7 +200,9 @@ Rectangle {
             hoverEnabled: true
             onEntered: okay.color = "gray",okaytext.color = "white"
             onExited: okay.color = "white",okaytext.color = "black"
-            onClicked: if(username.length > 2 && useremail.length > 2) {OpenSeed.oseed_auth(username,useremail,passphrase.text),popup.state = "Hide"}
+            onClicked: if(username.length > 2 && useremail.length > 2) {OpenSeed.oseed_auth(username,useremail,passphrase),popup.state = "Hide"} else {
+                           usernametext.focus = true
+                       }
         }
     }
 
@@ -161,7 +218,7 @@ Rectangle {
 
         Text {
             id:canceltext
-            text:"Cancel"
+            text:qsTr("Cancel")
             font.pixelSize: parent.height / 2
             anchors.centerIn: parent
         }
@@ -176,41 +233,9 @@ Rectangle {
     }
 
     Image {
-        //anchors.centerIn: parent
-        source:"graphics/bordernew.png"
-        //width:parent.width
-        //height:parent.height
-        x:0
-        y:0
+        anchors.centerIn: parent
+        source:"graphics/infoborder.png"
+        width:parent.width
+        height:parent.height
     }
-
-    Image {
-        //anchors.centerIn: parent
-        source:"graphics/bordernew.png"
-        //width:parent.width
-        //height:parent.height
-        x:parent.width-width
-        y:0
-        rotation:90
-    }
-
-    Image {
-        //anchors.centerIn: parent
-        source:"graphics/bordernew.png"
-        //width:parent.width
-        //height:parent.height
-        x:0
-        y:parent.height-height
-        rotation:270
-    }
-    Image {
-        //anchors.centerIn: parent
-        source:"graphics/bordernew.png"
-        //width:parent.width
-        //height:parent.height
-        x:parent.width-width
-        y:parent.height-height
-        rotation:180
-    }
-
 }

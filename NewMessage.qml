@@ -1,8 +1,9 @@
-import QtQuick 2.0
-import QtMultimedia 5.3
-//import QtQuick.Controls 1.3
+import QtQuick 2.2
+import QtQuick.Controls 2.2
 
-import Ubuntu.Components 1.3
+import QtMultimedia 5.3
+
+//import Ubuntu.Components 1.3
 
 import QtQuick.LocalStorage 2.0 as Sql
 
@@ -58,8 +59,8 @@ Item {
         Text {
             anchors.centerIn: parent
             color:"white"
-            text:if(commenttext.length < 1){"Cancel"} else {"Okay"}
-            font.pointSize:parent.height /2
+            text:if(commenttext.length < 1){qsTr("Cancel")} else {qsTr("Okay")}
+            font.pointSize:if(parent.height > 0) {parent.height /2} else {8}
 
         }
 
@@ -91,7 +92,7 @@ Item {
      anchors.rightMargin:parent.height * 0.01
      anchors.left:parent.left
      maximumLength: 144
-     placeholderText: "Comment on the image"
+     placeholderText: qsTr("Comment on the image")
      text:newcomment
      onTextChanged: newcomment = text
     }

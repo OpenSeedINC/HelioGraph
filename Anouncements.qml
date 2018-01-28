@@ -86,8 +86,8 @@ Item {
 
         Text {
             anchors.centerIn: parent
-            text:"Announcement"
-            font.pointSize: parent.height * 0.3
+            text:qsTr("Announcement")
+            font.pointSize: if(parent.height > 0) {parent.height * 0.3} else {8}
             color:"white"
         }
 
@@ -111,7 +111,7 @@ Item {
 
         Text {
             id:okaytext
-            text:"Okay"
+            text:qsTr("Okay")
             font.pixelSize: parent.height / 2
             anchors.centerIn: parent
         }
@@ -120,7 +120,7 @@ Item {
             hoverEnabled: true
             onEntered: okay.color = "gray",okaytext.color = "white"
             onExited: okay.color = "white",okaytext.color = "black"
-            onClicked: OpenSeed.announcement_seen(type), popup.state = "Hide",get_stream.running = true
+            onClicked: OpenSeed.announcement_seen(type), popup.state = "Hide",get_stream.running = true,welcome_screen.state = "Show"
         }
     }
 
@@ -136,7 +136,7 @@ Item {
 
         Text {
             id:canceltext
-            text:"Cancel"
+            text:qsTr("Cancel")
             font.pixelSize: parent.height / 2
             anchors.centerIn: parent
         }
@@ -151,49 +151,11 @@ Item {
         }
     }
 
-   /* Image {
+    Image {
         anchors.centerIn: parent
         width:parent.width * 1.01
         height:parent.height * 1.01
         source:"graphics/infoborder.png"
-    } */
-
-    Image {
-        //anchors.centerIn: parent
-        source:"graphics/bordernew.png"
-        //width:parent.width
-        //height:parent.height
-        x:0
-        y:0
-    }
-
-    Image {
-        //anchors.centerIn: parent
-        source:"graphics/bordernew.png"
-        //width:parent.width
-        //height:parent.height
-        x:parent.width-width
-        y:0
-        rotation:90
-    }
-
-    Image {
-        //anchors.centerIn: parent
-        source:"graphics/bordernew.png"
-        //width:parent.width
-        //height:parent.height
-        x:0
-        y:parent.height-height
-        rotation:270
-    }
-    Image {
-        //anchors.centerIn: parent
-        source:"graphics/bordernew.png"
-        //width:parent.width
-        //height:parent.height
-        x:parent.width-width
-        y:parent.height-height
-        rotation:180
     }
 
 

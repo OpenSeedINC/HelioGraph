@@ -1,9 +1,13 @@
 import QtQuick 2.0
 
 Item {
-
-
     id:window_container
+
+    MouseArea {
+        anchors.fill:parent
+        onClicked: console.log("")
+    }
+
     states: [
 
         State {
@@ -23,8 +27,8 @@ Item {
                 y:mainView.height + window_container.height
             }
         }
-    ]
 
+    ]
 
     transitions: [
 
@@ -43,7 +47,6 @@ Item {
         }
 
 
-
     ]
 
     state:"Hide"
@@ -60,33 +63,32 @@ Item {
             color:"gray"
         }
 
-    Rectangle {
-        anchors.bottom:parent.bottom
-        anchors.bottomMargin:parent.height * 0.1
-        anchors.left:parent.left
-        anchors.leftMargin: parent.height * 0.1
-        width:parent.height * 0.8
-        height:parent.height * 0.8
-        radius:8
-        border.color:"black"
-        color:if(themenu.state == "Hide") {"#202020"} else {"#5F4F4F"}
+        Rectangle {
+            anchors.bottom:parent.bottom
+            anchors.bottomMargin:parent.height * 0.1
+            anchors.left:parent.left
+            anchors.leftMargin: parent.height * 0.1
+            width:parent.height * 0.8
+            height:parent.height * 0.8
+            radius:8
+            border.color:"black"
+            color:if(themenu.state == "Hide") {"#202020"} else {"#5F4F4F"}
 
-        Image {
-            anchors.centerIn: parent
-            source:"graphics/menu.png"
-            width:parent.width * 0.9
-            height:parent.height * 0.9
-            fillMode: Image.PreserveAspectFit
+            Image {
+                anchors.centerIn: parent
+                source:"graphics/menu.png"
+                width:parent.width * 0.9
+                height:parent.height * 0.9
+                fillMode: Image.PreserveAspectFit
 
+            }
+
+            MouseArea {
+                anchors.fill:parent
+                onClicked:if(mainView.width > mainView.height){} else {if(themenu.state == "Hide") {themenu.state = "Show"} else {themenu.state = "Hide"} }
+            }
         }
 
-        MouseArea {
-            anchors.fill:parent
-            onClicked:if(mainView.width > mainView.height){} else {if(themenu.state == "Hide") {themenu.state = "Show"} else {themenu.state = "Hide"} }
-        }
-
-
-    }
     Rectangle {
         //anchors.verticalCenter: parent.verticalCenter
         anchors.bottom:parent.bottom
@@ -122,7 +124,8 @@ Item {
         width:parent.height * 0.8
         height:parent.height * 0.8
         radius:8
-        color:"#202020"
+        color:if(search.visible == false) {"#202020"} else {"#5F4F4F"}
+
         border.color:"black"
 
 
@@ -133,6 +136,11 @@ Item {
             height:parent.height * 0.9
             fillMode: Image.PreserveAspectFit
 
+        }
+
+        MouseArea {
+            anchors.fill:parent
+            onClicked:if(search.visible == false) {search.visible = true} else {search.visible = false}
         }
 
     }

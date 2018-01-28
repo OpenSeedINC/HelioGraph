@@ -1,7 +1,14 @@
 import QtQuick 2.0
-import QtMultimedia 5.3
-import QtQuick.Controls 1.3
+import QtMultimedia 5.9
+import QtGraphicalEffects 1.0
+import QtQuick.Controls 2.2
+import QtQuick.Dialogs 1.2
+import QtSensors 5.9
+//import QtQuick.Controls 1.3
 
+//import Ubuntu.Components 1.3
+
+//import Ubuntu.Content 1.1
 
 import QtQuick.LocalStorage 2.0 as Sql
 
@@ -16,14 +23,33 @@ Item {
     property string thesource:""
     property string thefile:""
     property int selectedEffect:0
-    property int isPrivate: 0
+    property int selectedOverlay:0
+    property int isPrivate: privsetting
     property int capturedAsspect:0
     property int setFlash:0
     property int setExpos:0
     property int setFocus: 0
+    property int privacy:privsetting
+    property int rating:0
+    property int fromhub:0
 
     property string theComment:""
 
+
+   /* property list<ContentItem> importItems
+      property var activeTransfer
+
+      ContentPeer {
+          id: picSourceSingle
+          contentType: ContentType.Pictures
+          handler: ContentHandler.Source
+          selectionType: ContentTransfer.Single
+
+      } */
+
+    MouseArea {anchors.fill:parent
+
+    }
 
 
    states: [
@@ -73,9 +99,32 @@ Item {
    state:"Hide"
 
 
-   onStateChanged: if(window_container.state == "Show") {camera.start()
+   onStateChanged: if(window_container.state == "Show") {camera.start();
+                        comment.text ="";
+                        //camera.position = 0;
+                        setFocus = 0;
+                       whichview = 3;
+                       privacy =privsetting;
+                       savedclicked.enabled = true;
 
-                   } else {camera.stop(),comment.text =""}
+                   } else {camera.start();
+                       //camera.stop();
+
+                            setFocus = 0;
+                       setFlash =0
+                       setExpos =0
+                       setFocus= 0
+                       privacy =privsetting
+                       rating =0
+                       fromhub =0
+                       thesource = "";
+                       thefile = "";
+
+                       //check.clear();
+
+
+                      if(whichview == 3) {searchstring = " ";reload.running = true;}
+                       }
 
 
 
@@ -85,12 +134,11 @@ clip:true
 
 
 
-
     Rectangle {
         anchors.fill:parent
         //color:"#9d9d9d"
-        //color:"black"
-        color:"#4e4e4e"
+        color:"black"
+        //color:"#4e4e4e"
         //color:"#202020"
     }
 
@@ -149,7 +197,7 @@ clip:true
 
                 }
                 onImageSaved: {
-                    thefile = path
+                   thefile = path
                 }
             }
 
@@ -159,8 +207,8 @@ clip:true
     Rectangle {
         color:"#9d9d9d"
         anchors.centerIn:border
-        width:border.width * 1.01
-        height:border.height * 1.01
+        width:viewport.width * 1.01
+        height:viewport.height * 1.01
 
     }
 
@@ -179,14 +227,47 @@ clip:true
             width:if(parent.width > parent.height) {parent.width * 0.80} else {parent.width}
             height:if(parent.width > parent.height) {parent.height} else {parent.width * 0.99}
 
-            //rotation:90
+           // rotation:if(parent.width > parent.height) {0} else {90}
 
             fillMode: Image.PreserveAspectCrop
             focus : visible // to receive focus and capture key events when visible
+            visible:if(thesource == "") {true} else {false}
+            autoOrientation : true
+
+
+
 
         }
 
-    Image {
+    Rectangle {
+        anchors.top:viewport.top
+        anchors.right:viewport.right
+        anchors.margins: parent.height * 0.01
+        width:viewport.height * 0.08
+        height: viewport.height * 0.08
+        color:"#4e4e4e"
+        radius: 8
+        border.color:"gray"
+        border.width:2
+
+
+        Image {
+            source:"graphics/backbutton.png"
+            anchors.centerIn: parent
+            width:parent.width * 0.7
+            height:parent.height * 0.7
+            mirror:true
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked:window_container.state = "Hide"
+        }
+
+
+    }
+
+   /* Image {
         id:border
         source:"graphics/cameraborder.png"
         anchors.centerIn: viewport
@@ -194,37 +275,244 @@ clip:true
         height:viewport.height
         visible:if(thesource == "") {true} else {false}
 
-    }
-
-
-    Preview {
-        id:check
-        anchors.centerIn: viewport
-        width:viewport.width
-        height:viewport.height
-        visible:if(thesource == "") {false} else {true}
-        effect:selectedEffect
-    }
+    } */
 
 
 
 
-    Column {
-        id:settings_pic
-        y:parent.height * 0.2
-        x:check.width * 1.01
-        width:parent.width - check.width
-        height:parent.height
 
-        clip:true
     Item {
+        //anchors.top: if(parent.width > parent.height) {parent.top} else {border.bottom}
+        //anchors.left:if(parent.width > parent.height) {check.right} else {parent.left}
+        anchors.top:parent.top
+        anchors.left:parent.left
+        anchors.right:parent.right
+        anchors.bottom:parent.bottom
+        visible:if(thesource == "") {false} else {true}
 
-        width:parent.width
-        height:mainView.height * 0.1
+        Preview {
+            id:check
+
+            anchors.top:parent.top
+            anchors.left:parent.left
+            width:if(parent.width < parent.height) {viewport.width} else {viewport.width /* * 0.8*/ }
+            height:if(parent.width < parent.height) {viewport.height} else {viewport.height /* * 0.7 */}
+            visible:if(thesource == "") {false} else {true}
+            effect:selectedEffect
+            overlay:selectedOverlay
+            therotation:if(camera.position == 1) {capturedAsspect} else {-90}
+
+        }
+
+
+
+
+        Rectangle {
+            anchors.centerIn: priv_img
+            width:priv_img.width * 1.1
+            height:priv_img.height * 1.1
+            radius:10
+            color:"black"
+            opacity:0.5
+            visible:if(thesource == "") {false} else {true}
+        }
+
+        Image {
+            id:priv_img
+            source:if(privacy == 0) {"graphics/stock_website.svg"} else {"graphics/lock.svg"}
+            fillMode:Image.PreserveAspectFit
+            width:rating_img.width
+            height:rating_img.width
+            //anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom:check.bottom
+            anchors.right:check.right
+            anchors.margins: check.height * 0.02
+            visible:if(thesource == "") {false} else {true}
+
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: { if(privacy == 0) {privacy = 1;} else {privacy = 0;}
+
+                }
+            }
+
+        }
+
+        Rectangle {
+            anchors.centerIn: rotate_img
+            width:rotate_img.width * 1.1
+            height:rotate_img.height * 1.1
+            radius:10
+            color:"black"
+            opacity:0.5
+            visible:if(thesource == "") {false} else {true}
+        }
+
+        Image {
+            id:rotate_img
+            source:"graphics/rotate-right.svg"
+            fillMode:Image.PreserveAspectFit
+            width:rating_img.width
+            height:rating_img.width
+            //anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom:check.bottom
+            anchors.left:check.left
+            anchors.margins: check.height * 0.02
+            visible:if(thesource == "") {false} else {true}
+
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {check.therotation = check.therotation + 90;capturedAsspect = capturedAsspect + 90}
+            }
+
+        }
+
+
+
+
+        Rectangle {
+            anchors.centerIn: rating_img
+            width:rating_img.width * 1.1
+            height:rating_img.height * 1.1
+            radius:10
+            color:"black"
+            opacity:0.5
+            visible:if(thesource == "") {false} else {true}
+
+        }
+
+
+        Image {
+            id:rating_img
+            source:switch(rating) {
+                   case 0:"graphics/E_ESRB.png";break;
+                   case 1:"graphics/e10_ESRB.png";break;
+                   case 2: "graphics/T_ESRB.png";break;
+                   case 3: "graphics/M_ESRB.png";break;
+                   case 4: "graphics/aO_ESRB.png";break;
+                   default: "graphics/E_ESRB.png";break;
+                   }
+            fillMode:Image.PreserveAspectFit
+            width:check.height * 0.15
+            height:check.height * 0.15
+            //anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top:parent.top
+            anchors.left:parent.left
+            anchors.margins: parent.height * 0.02
+            //rotation:-90
+            visible:if(thesource == "") {false} else {true}
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {rating_picking.visible = true,parent.visible = false}
+
+                }
+
+            }
+
+        Rectangle {
+            visible:rating_picking.visible
+            //anchors.centerIn: rating_picking
+            anchors.top:rating_picking.top
+            anchors.horizontalCenter: rating_picking.horizontalCenter
+            width:rating_picking.width * 1.1
+            height:rating_picking.height * 1.05
+            radius:10
+            color:"black"
+            opacity:0.5
+            //rotation: -90
+        }
+
+        Column {
+            id:rating_picking
+            visible:false
+            //x:rating_img.width
+           // y:rating_img.height
+           anchors.left:rating_img.left
+           anchors.top:rating_img.top
+           clip:true
+
+            //anchors.bottom:parent.bottom
+            width:rating_img.width
+            height:if(parent.width > parent.height) {parent.height * 0.8} else {parent.height * 0.6 }
+            spacing:parent.height * 0.01
+            //rotation:-90
+
+             Image {
+                        width:rating_img.width
+                        height:rating_img.height
+                source:"graphics/E_ESRB.png"
+
+                fillMode:Image.PreserveAspectFit
+
+                MouseArea {
+                    anchors.fill:parent
+                    onClicked:rating = 0,rating_img.visible = true,rating_picking.visible = false
+                }
+            }
+
+             Image {
+                        width:rating_img.width
+                        height:rating_img.height
+                source:"graphics/e10_ESRB.png"
+
+                fillMode:Image.PreserveAspectFit
+
+                MouseArea {
+                    anchors.fill:parent
+                    onClicked:rating = 1,rating_img.visible = true,rating_picking.visible = false
+                }
+            }
+             Image {
+                        width:rating_img.width
+                        height:rating_img.height
+                source:"graphics/T_ESRB.png"
+
+                fillMode:Image.PreserveAspectFit
+
+                MouseArea {
+                    anchors.fill:parent
+                    onClicked:rating = 2,rating_img.visible = true,rating_picking.visible = false
+                }
+            }
+             Image {
+                        width:rating_img.width
+                        height:rating_img.height
+                source:"graphics/M_ESRB.png"
+
+                fillMode:Image.PreserveAspectFit
+
+                MouseArea {
+                    anchors.fill:parent
+                    onClicked:rating = 3,rating_img.visible = true,rating_picking.visible = false
+                }
+            }
+             Image {
+                        width:rating_img.width
+                        height:rating_img.height
+                source:"graphics/aO_ESRB.png"
+
+                fillMode:Image.PreserveAspectFit
+
+                MouseArea {
+                    anchors.fill:parent
+                    onClicked:rating = 4,rating_img.visible = true,rating_picking.visible = false
+                }
+            }
+
+
+        }
+
+
+
+
+
 
     Rectangle {
         anchors.centerIn: effectsRow
-        width:effectsRow.width * 1.02
+        width:effectsRow.width * 1.10
         height:effectsRow.height * 1.01
         color:"#4e4e4e"
         radius:8
@@ -232,45 +520,113 @@ clip:true
         border.width:2
     }
 
-    GridView {
+
+
+    Grid {
         id:effectsRow
-
-        width:parent.width * 0.99
-        height:parent.height
-        anchors.horizontalCenter: parent.horizontalCenter
-        flow:GridView.FlowTopToBottom
-
+        anchors.top: if(parent.width > parent.height) {parent.top} else {check.bottom}
+        anchors.topMargin:if(parent.width > parent.height) {0} else {parent.height * 0.01}
+        anchors.left:if(parent.width > parent.height) {check.right} else {parent.left}
+        anchors.leftMargin: if(parent.width > parent.height) {parent.height * 0.02} else {parent.height * 0.02}
+        //anchors.right:if(parent.width > parent.height) {parent.right} else {parent.right}
+        anchors.right:parent.right
+        anchors.rightMargin:if(parent.width > parent.height) {5} else {0}
+        //width:parent.width - check.width
+        height:if(parent.width > parent.height) {parent.height * 0.30} else {parent.height * 0.14}
+        spacing: if(parent.width > parent.height) {parent.width * 0.02} else {parent.width * 0.04}
         clip:true
-        cellHeight:height
-        cellWidth:height
+        columns: if(parent.width > parent.height) {2} else {4}
 
-        model:5
 
-        delegate: Effects {
-            effect:modelData
+        Rectangle {
+            id:brightcontrast
+            width:window_container.height * 0.13
+            height:width
+           // anchors.verticalCenter: parent.verticalCenter
+            radius:8
+            color:"#202020"
 
-            height:effectsRow.cellHeight * 0.8
-            width:effectsRow.cellHeight * 0.8
+            Image {
+                width:parent.width * 0.8
+                height:parent.height * 0.8
+                anchors.centerIn: parent
+                source:"graphics/BaC.png"
+                fillMode:Image.PreserveAspectFit
+            }
 
             MouseArea {
                 anchors.fill:parent
-                onClicked: {
-
-                            selectedEffect = modelData
-
-
-                }
+                onClicked:hideall(),briandCon.state = "Show"
             }
+
         }
 
+        Rectangle {
+            id:colorandsaturation
+            width:window_container.height * 0.13
+            height:width
+            //anchors.verticalCenter: parent.verticalCenter
+            radius:8
+            color:"#202020"
+            Image {
+                width:parent.width * 0.8
+                height:parent.height * 0.8
+                anchors.centerIn: parent
+                source:"graphics/CaS.png"
+                fillMode:Image.PreserveAspectFit
+            }
+
+            MouseArea {
+                anchors.fill:parent
+                onClicked:hideall(),colandSat.state = "Show"
+            }
+
+        }
+
+        Rectangle {
+            id:overlay
+            width:window_container.height * 0.13
+            height:width
+           // anchors.verticalCenter: parent.verticalCenter
+            radius:8
+            color:"#202020"
+            Image {
+                width:parent.width * 0.8
+                height:parent.height * 0.8
+                anchors.centerIn: parent
+                source:"graphics/Overlay.png"
+                fillMode:Image.PreserveAspectFit
+            }
+
+            MouseArea {
+                anchors.fill:parent
+                onClicked:hideall(),theoverlay.state = "Show"
+            }
+
+        }
+
+        Rectangle {
+            id:onetouch
+            width:window_container.height * 0.13
+            height:width
+          //  anchors.verticalCenter: parent.verticalCenter
+            radius:8
+            color:"#202020"
+            Image {
+                width:parent.width * 0.8
+                height:parent.height * 0.8
+                anchors.centerIn: parent
+                source:"graphics/Wizard.png"
+                fillMode:Image.PreserveAspectFit
+            }
+
+            MouseArea {
+                anchors.fill:parent
+                onClicked:hideall(),thewizard.state = "Show"
+            }
+        }
     }
 
-    }
-
-    Item {
-
-        width:parent.width * 0.99
-        height:parent.height * 0.06
 
     Rectangle {
         anchors.centerIn: commonTags
@@ -284,62 +640,188 @@ clip:true
 
     Flow {
         id:commonTags
-        //anchors.top:effectsRow.bottom
-        //anchors.topMargin:parent.height * 0.01
-        width:parent.width
-        height:parent.height
-        anchors.horizontalCenter: parent.horizontalCenter
-
-        Rectangle {
-                width:tagtext.width  * 1.1
-                height:tagtext.height * 1.1
-                radius:4
-                color:"#4e4e4e"
-                border.color:"gray"
-
-        Text {
-            id:tagtext
-            text:"#selfie"
-            color:"white"
-            font.pixelSize: commonTags.height * 0.3
-            anchors.centerIn: parent
-        }
-        }
+        anchors.top:if(parent.width > parent.height) {effectsRow.bottom} else {effectsRow.bottom}
+        anchors.left:if(parent.width > parent.height) {check.right} else {parent.left}
+        anchors.leftMargin: if(parent.width > parent.height) {parent.height * 0.02} else {0}
+        anchors.right:parent.right
+        anchors.topMargin:if(parent.width > parent.height) {0} else {parent.height * 0.01}
+        //width:parent.width * 0.99
+        height:parent.height * 0.03
+        //anchors.horizontalCenter: parent.horizontalCenter
 
 
     }
-    }
 
-   /*  Rectangle {
+    Rectangle {
         anchors.centerIn: comment
         width:comment.width * 1.02
-        height:comment.height * 1.1
+        height:comment.height * 1.02
         color:"white"
         radius:8
         border.color:"gray"
         border.width:10
-    } */
+    }
 
     TextField {
             visible:if(thesource == "") {false} else {true}
             id:comment
-            //anchors.top:commonTags.bottom
-            //anchors.topMargin: parent.height * 0.02
-           // anchors.bottom:footer.top
-            //anchors.bottomMargin: parent.height * 0.02
+            anchors.top:if(Qt.inputMethod.visible == true) {check.top} else {commonTags.bottom}
+            anchors.topMargin: if(Qt.inputMethod.visible == true) {parent.height * 0.008} else {parent.height * 0.01 }
+            //anchors.bottom:if(Qt.inputMethod.visible == true) {check.bottom} else {parent.bottom}
+            anchors.bottom:footerSaveOpts.top
+            anchors.bottomMargin: if(Qt.inputMethod.visible == true) {if(parent.width > parent.height) {parent.height * 0.5} else {parent.height * 0.35} } else {parent.height * 0.01 }
+            anchors.right:parent.right
+            anchors.left:if(Qt.inputMethod.visible == true) {parent.left} else {if(parent.width > parent.height) {check.right} else {parent.left}}
+            anchors.leftMargin: if(parent.width > parent.height) {parent.height * 0.02} else {0}
            // anchors.horizontalCenter: parent.horizontalCenter
-            //horizontalAlignment: Text.AlignLeft
-            //verticalAlignment: Text.AlignTop
-            //maximumLength: 144
-            height:parent.height * 0.18
-            width:parent.width * 0.99
-            placeholderText: "Add # to create new hashtags."
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignTop
+            maximumLength: 144
+            //height:if(Qt.inputMethod.visible == true) {parent.height * 0.5 } else {parent.height * 0.16}
+            //width:parent.width * 0.99
+            placeholderText: qsTr("Add # to create new hashtags.")
             onTextChanged: theComment = comment.text
 
 
     }
 
-}
+
+
+    Rectangle {
+
+        id:footerSaveOpts
+        visible:if(thesource != "") {true} else {false}
+
+        //anchors.top:comment.bottom
+        anchors.right:parent.right
+        anchors.left:if(parent.width > parent.height){check.right} else {parent.left}
+        anchors.leftMargin: if(parent.width > parent.height) {parent.height * 0.02} else {0}
+        anchors.bottom:parent.bottom
+        height:parent.height * 0.1
+        color:"#4e4e4e"
+
+        Rectangle {
+            anchors.top:parent.top
+            width:parent.width
+            height:parent.height * 0.06
+            color:"gray"
+
+        }
+
+        Rectangle {
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right:parent.right
+            anchors.rightMargin: parent.height *0.05
+            width:(parent.height * 1.5) + okaytext.text.length
+            height:parent.height * 0.8
+            radius:8
+            color:if(savedclicked.pressed == true) {"#5F4F4F"} else {"#9d9d9d"}
+
+            Text {
+                id:okaytext
+                anchors.centerIn: parent
+                font.pixelSize: parent.height * 0.5
+                text:qsTr("Okay")
+            }
+
+            MouseArea {
+                id:savedclicked
+                anchors.fill:parent
+                onClicked:{
+
+
+                            progress.visible = true;
+                            progress.state = "minimal"
+                            info = "Saving Picture";
+                           // if(camera.position == 2) {
+                             //   capturedAsspect = -90;
+                            //}
+                                //capturedAsspect = 0;
+                                //selectedEffect = 0;
+
+
+                            if(thefile.search("file://") == -1) {
+                                thefile = thefile;
+
+
+                            } else {
+                                thefile = thefile.split("file://")[1];
+
+                            }
+                            var saver = "";
+
+                            if(fromhub == 1) {
+                                saver = paths.split(",")[2].trim()+thefile.split(".jpg")[0].split("/")[thefile.split("/").length -1];
+                               // console.log(saver);
+                                fromhub = 0;
+                            } else {
+                                saver = thefile.split(".jpg")[0];
+                               // console.log(saver);
+                            }
+
+                            check.grabToImage(function(result) {
+                               // console.log(thefile.split(".jpg")[0]+"_stream.jpg");
+                                result.saveToFile(saver+"_stream.jpg");
+
+
+
+                            //fileio.store ="library,"+thefile+","+id
+
+
+                            fileio.store ="library,"+saver+"_stream.jpg,"+id
+                            //window_container.state = "Hide"
+
+                            //selectedEffect+":;:"+capturedAsspect
+
+                            Scripts.store_img("Library",fileio.store,"0:;:0",privacy+":;:"+rating,theComment)
+
+
+                            //reload.running = true
+                            var toserver = fileio.store.split(":;:");
+                            if(heart == "Online") {OpenSeed.sendimage(id,toserver[1]+":;:"+toserver[2],"0:;:0",theComment," ",privacy+":;:"+rating);progress.visible = true; info = "Sending Image";} else {progress.visible = false; info = " ";}
+                                //selectedEffect+":;:"+capturedAsspect
+                            thesource = ""
+                            comment.text = ""
+
+                            });
+
+
+                }
+
+            }
+        }
+
+        Rectangle {
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left:parent.left
+            anchors.rightMargin: parent.left *0.05
+            width:(parent.height * 1.5) + canceltext.text.length
+            height:parent.height * 0.8
+            radius:8
+            color:"#9d9d9d"
+
+            Text {
+                id:canceltext
+                anchors.centerIn: parent
+                font.pixelSize: parent.height * 0.5
+                text:qsTr("Cancel")
+            }
+
+            MouseArea {
+                anchors.fill:parent
+                onClicked:check.clear(),thesource = "",comment.text = ""
+            }
+        }
+
+    }
+
+
+    }
+
+
+
+
+
 
 
         Item {
@@ -350,11 +832,11 @@ clip:true
                               else {parent.height - parent.height * 0.08}
               } else {
                 if(thesource == "") {viewport.y + viewport.height}
-                            else {parent.height - parent.height * 0.08}
+                            else {parent.height - parent.height * 0.1}
               }
-            x:if(parent.width > parent.height) {border.width} else {0}
-            width:if(parent.width > parent.height) {parent.width - border.width} else {parent.width}
-            height:if(thesource == "") {parent.height - y} else {parent.height * 0.08}
+            x:if(parent.width > parent.height) {if(thesource == "") {viewport.width} else {0} } else {0}
+            width:if(parent.width > parent.height) {if(thesource == "") {parent.width - viewport.width} else {parent.width}} else {parent.width}
+            height:if(thesource == "") {parent.height - y} else {parent.height * 0.1}
 
 
         Rectangle {
@@ -363,6 +845,7 @@ clip:true
             width:parent.width
             height:parent.height
             color:"#4e4e4e"
+           // opacity:0.05
 
             Rectangle {
                 anchors.top:parent.top
@@ -418,18 +901,51 @@ clip:true
                         onClicked: {
                                 capturedAsspect = selectedAsspect;
                             camera.imageCapture.captureToLocation(paths.split(",")[2].trim());
-                            camera.imageCapture.capture();
+                            //camera.imageCapture.capture();
                         }
                     }
         }
 
-        Column {
 
+        Rectangle {
+            id:importbutton
+            anchors.bottom:if(mainView.width > mainView.height) {parent.top} else {parent.bottom}
+            anchors.bottomMargin:if(mainView.width > mainView.height) {-height * 1.03 } else {parent.height * 0.03}
+            anchors.margins:parent.height * 0.03
+            anchors.left:parent.left
+            width:if(mainView.width > mainView.height) {parent.height * 0.1} else {parent.height * 0.2}
+            height:if(mainView.width > mainView.height) {parent.height * 0.1} else {parent.height * 0.2}
+            color:"#202020"
+            radius:8
+            border.color:"black"
+
+            Image {
+                anchors.centerIn: parent
+                source:"graphics/file.png"
+                width:parent.width * 0.81
+                height:parent.height * 0.8
+                fillMode:Image.PreserveAspectFit
+            }
+
+            MouseArea {
+                        anchors.fill: parent;
+                        onClicked: {
+                                activeTransfer = picSourceSingle.request();
+
+                        }
+                    }
+        }
+
+
+
+
+        Column {
             anchors.left:camerabutton.right
             anchors.leftMargin:if(mainView.width > mainView.height){-camerabutton.width / 2.5 } else {parent.height * 0.02}
             width:camerabutton.height * 0.4
             height: parent.height - camerabutton.y
             y:if(mainView.width > mainView.height){camerabutton.height * 1.1 + camerabutton.y } else {camerabutton.y - width * 0.5}
+
             spacing:parent.height * 0.02
 
 
@@ -489,11 +1005,6 @@ clip:true
                                   }
         }
         }
-
-
-
-
-
 
         }
 
@@ -580,108 +1091,639 @@ clip:true
 
 }
 
-        Rectangle {
-            visible:if(thesource != "") {true} else {false}
-            id:footerSaveOpts
-            width:parent.width
-            height:parent.height
-            color:"#4e4e4e"
+
+
+        }
+
+
+
+
+      /*  Connections {
+                     target: window_container.activeTransfer
+                     onStateChanged: {
+                         if (window_container.activeTransfer.state === ContentTransfer.Charged) {
+                               capturedAsspect = 0;
+                             //importItems = window_container.activeTransfer.items;
+                             thesource = window_container.activeTransfer.items[0].url;
+                             thefile = window_container.activeTransfer.items[0].url;
+                             //console.log("From Transfer: "+thefile);
+                             fromhub = 1;
+
+                         }
+
+                     }
+                 } */
+
+
+
+        Item {
+            id:thewizard
+
+            states: [
+                    State {
+                        name:"Show"
+                        PropertyChanges {
+                            target:thewizard
+                            y:window_container.height * 0.03
+                        }
+
+
+                },
+                State {
+                    name:"Hide"
+                    PropertyChanges {
+                        target:thewizard
+                        y:window_container.height
+                    }
+                }
+            ]
+
+            state:"Hide"
+
+            width:if(parent.width > parent.height) {parent.width * 0.6} else {parent.width * 0.9}
+            height:window_container.height * 0.8
+            anchors.horizontalCenter: window_container.horizontalCenter
+            clip:true
 
             Rectangle {
+                anchors.fill: parent
+                radius:8
+                color:"#202020"
+            }
+
+            Text {
+                id:wizardtitle
                 anchors.top:parent.top
+                anchors.horizontalCenter: parent.horizontalCenter
+                text:"Wizard"
+                color:"white"
+                font.pointSize: if(parent.height > 0 ) {parent.height * 0.05} else {8}
+
+            }
+
+            Rectangle {
+                anchors.top:wizardtitle.bottom
                 width:parent.width
-                height:parent.height * 0.06
-                color:"gray"
+                height:parent.height * 0.01
+
+                color:"#7e4e4e"
+            }
+
+            GridView {
+                    id:effectsGrid
+                    anchors.top:wizardtitle.bottom
+                    anchors.topMargin:parent.height * 0.02
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    width:parent.width * 0.9
+                    height:parent.height * 0.9
+                    snapMode: GridView.SnapOneRow
+
+                    clip:true
+                    cellHeight:height * 0.9
+                    cellWidth:width
+
+                    model:ListModel {
+                        id:effectslist
+
+                        ListElement {
+                            theeffect:1
+                            title:"No Effect"
+                            artist:"The Nihilist"
+                        }
+                        ListElement {
+                            theeffect:2
+                            title:"Black and White"
+                            artist:"Vague Entertainment"
+                        }
+                        ListElement {
+                            theeffect:3
+                            title:"Sepia"
+                            artist:"Vague Entertainment"
+                        }
+                        ListElement {
+                            theeffect:4
+                            title:"Sepia Old"
+                            artist:"Vague Entertainment"
+                        }
+                        ListElement {
+                            theeffect:5
+                            title:"High Contrast B/W"
+                            artist:"Vague Entertainment"
+                        }
+                       /* ListElement {
+                            theeffect:6
+                        } */
+                    }
+
+                   delegate: Item {
+                       height:effectsGrid.cellHeight
+                       width:effectsGrid.cellWidth
+                                    Effects {
+                        effect:theeffect
+                        type:0
+                        anchors.centerIn: parent
+                        thetitle:title
+                        theartist:artist
+
+                        height:parent.height * 0.98
+                        width:parent.width * 0.98
+                        therotation:if(camera.position == 2) {-90} else {capturedAsspect}
+
+                        theHue:check.theHue
+                        theSat:check.theSat
+                        thebrightness:check.thebrightness
+                        thecontrast: check.thecontrast
+
+
+                        MouseArea {
+                            anchors.fill:parent
+                            onClicked: {
+                                        thewizard.state = "Hide"
+                                        selectedEffect = theeffect
+
+                            }
+                        }
+                    }
+                   }
+
+
+
+                    add: Transition {
+                            //NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
+                            NumberAnimation { property: "scale"; from: 0; to: 1.0; duration: 200 }
+                        }
+
+                }
+
+
+
+        }
+
+        Item {
+            id:theoverlay
+
+
+            states: [
+                    State {
+                        name:"Show"
+                        PropertyChanges {
+                            target:theoverlay
+                            y:window_container.height * 0.03
+                        }
+
+
+                },
+                State {
+                    name:"Hide"
+                    PropertyChanges {
+                        target:theoverlay
+                        y:window_container.height
+                    }
+                }
+            ]
+
+            state:"Hide"
+
+            width:if(parent.width > parent.height) {parent.width * 0.6} else {parent.width * 0.9}
+            height:if(parent.width > parent.height) {window_container.height * 0.95} else {window_container.height * 0.8}
+             clip:true
+            anchors.horizontalCenter: window_container.horizontalCenter
+
+            Rectangle {
+                anchors.fill: parent
+                radius:8
+                color:"#202020"
+            }
+
+            Text {
+                id:overlaytitle
+                anchors.top:parent.top
+                anchors.horizontalCenter: parent.horizontalCenter
+                text:"OverLays"
+                color:"white"
+                font.pointSize: if(parent.height > 0 ) {parent.height * 0.05} else {8}
 
             }
 
             Rectangle {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right:parent.right
-                anchors.rightMargin: parent.height *0.05
-                width:(parent.height * 1.5) + okaytext.text.length
-                height:parent.height * 0.8
-                radius:8
-                color:"#9d9d9d"
+                anchors.top:overlaytitle.bottom
+                width:parent.width
+                height:parent.height * 0.01
 
-                Text {
-                    id:okaytext
-                    anchors.centerIn: parent
-                    font.pixelSize: parent.height * 0.5
-                    text:"Okay"
-                }
-
-                MouseArea {
-                    anchors.fill:parent
-                    onClicked:{
-                                if(camera.position == 2) {
-                                    capturedAsspect = -90;
-                                }
-                                console.log(comment.text);
-                                fileio.store ="library,"+thefile+","+id
-                                Scripts.store_img("Library",fileio.store,selectedEffect+":;:"+capturedAsspect,isPrivate,theComment),
-                                thesource = ""
-                                comment.text = ""
-                                reload.running = true
-                                if(heart == "Online") {OpenSeed.sync_library()}
-                                window_container.state = "Hide"
-                                }
-
-                }
+                color:"#4e4e4e"
             }
 
-            Rectangle {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left:parent.left
-                anchors.rightMargin: parent.left *0.05
-                width:(parent.height * 1.5) + canceltext.text.length
-                height:parent.height * 0.8
-                radius:8
-                color:"#9d9d9d"
+            GridView {
+                    id:overlayGrid
+                    anchors.top:overlaytitle.bottom
+                    anchors.topMargin:parent.height * 0.02
+                    anchors.horizontalCenter: parent.horizontalCenter
 
-                Text {
-                    id:canceltext
-                    anchors.centerIn: parent
-                    font.pixelSize: parent.height * 0.5
-                    text:"Cancel"
+                    width:parent.width * 0.9
+                    height:parent.height * 0.9
+                    snapMode: GridView.SnapOneRow
+
+                    clip:true
+                    cellHeight:height * 0.9
+                    cellWidth:width
+
+                    model:ListModel {
+                        id:overlaylist
+
+                        ListElement {
+                            theeffect:1
+                            title:"No Overlay"
+                            artist:"The Nihilist"
+
+                        }
+                        ListElement {
+                            theeffect:2
+                            title:"Caged"
+                            artist:"Vague Entertainment"
+                        }
+                        ListElement {
+                            theeffect:3
+                            title:"Tattered"
+                            artist:"Vague Entertainment"
+                        }
+                        ListElement {
+                            theeffect:4
+                            title:"SoundWAV"
+                            artist:"Vague Entertainment"
+                        }
+
+                       /* ListElement {
+                            theeffect:5
+                        }
+                        ListElement {
+                            theeffect:6
+                        } */
+
+                    }
+
+                    delegate:
+                                 Item {
+                                      height:effectsGrid.cellHeight
+                                      width:effectsGrid.cellWidth
+                                      clip:true
+                                                            Effects {
+                                                                type:1
+                                               overlay:theeffect
+                                                anchors.centerIn: parent
+
+                                                thetitle:title
+                                                theartist:artist
+
+                                                height:parent.height * 0.98
+                                                 width:parent.width * 0.98
+                                                 therotation:if(camera.position == 2) {-90} else {capturedAsspect}
+                                                 theHue:check.theHue
+                                                 theSat:check.theSat
+                                                 thebrightness:check.thebrightness
+                                                 thecontrast: check.thecontrast
+
+
+                                      MouseArea {
+                                            anchors.fill:parent
+                                       onClicked: {
+                                              theoverlay.state = "Hide"
+                                              selectedOverlay = theeffect
+
+
+                                        }
+                                 }
+                    }
+                    }
+
+
+
+                    add: Transition {
+                            //NumberAnimation { property: "opacity"; from: 0; to: 1.0; duration: 400 }
+                            NumberAnimation { property: "scale"; from: 0; to: 1.0; duration: 200 }
+                        }
+
                 }
 
-                MouseArea {
-                    anchors.fill:parent
-                    onClicked:thesource = "",comment.text = ""
-                }
-            }
+
+
 
         }
 
-
-        }
-
-        Rectangle {
-            anchors.top:parent.top
-            anchors.right:parent.right
-            anchors.margins: parent.height * 0.01
-            width:parent.height * 0.05
-            height: parent.height * 0.05
-            color:"#4e4e4e"
-            radius: 8
-            border.color:"gray"
-            border.width:2
-
-
-            Image {
-                source:"graphics/backbutton.png"
-                anchors.centerIn: parent
-                width:parent.width * 0.7
-                height:parent.height * 0.7
-                mirror:true
-            }
+        Item {
+            id:colandSat
+            clip:true
 
             MouseArea {
                 anchors.fill: parent
-                onClicked:window_container.state = "Hide"
+                onClicked:console.log("caught")
             }
 
+
+            states: [
+                    State {
+                        name:"Show"
+                        PropertyChanges {
+                            target:colandSat
+                            y:effectsRow.height+effectsRow.y
+                        }
+
+
+                },
+                State {
+                    name:"Hide"
+                    PropertyChanges {
+                        target:colandSat
+                        y:window_container.height
+                    }
+                }
+            ]
+
+            state:"Hide"
+
+            width:parent.width
+            height:window_container.height - (effectsRow.y + effectsRow.height)
+
+            Rectangle {
+                anchors.fill:parent
+                color:"#202020"
+            }
+
+            Column {
+                anchors.top:parent.top
+                anchors.topMargin: parent.height * 0.1
+                width:parent.width
+                height:parent.height * 0.8
+                spacing: parent.height * 0.1
+
+                Image {
+
+                width:colandSat.height *0.2
+                height:colandSat.height * 0.2
+                source:"graphics/Hue.png"
+                fillMode: Image.PreserveAspectFit
+
+                Slider {
+                    id:col
+                    to: 100
+                    from: 0
+
+                    width:(window_container.width - parent.width) * 0.9
+                    anchors.left:parent.right
+                    anchors.leftMargin:parent.height * 0.1
+                    anchors.verticalCenter: parent.verticalCenter
+                    height:colandSat.hieght * 0.5
+                    stepSize: 1
+
+                    value: 0
+                    onValueChanged: check.theHue = (value * 0.01)
+
+                }
+
+                }
+
+                Image {
+
+                width:colandSat.height *0.2
+                height:colandSat.height * 0.2
+                source:"graphics/sat.png"
+                fillMode: Image.PreserveAspectFit
+
+                Slider {
+                    id:sat
+                   to: 100
+                   from: 0
+                    width:(window_container.width - parent.width) * 0.9
+                    anchors.left:parent.right
+                    anchors.leftMargin:parent.height * 0.1
+                    anchors.verticalCenter: parent.verticalCenter
+                    height:colandSat.hieght * 0.5
+                    stepSize: 1
+
+                    value: 0
+                    onValueChanged: check.theSat = (value * 0.01)
+
+                }
+
+                }
+            }
+
+
+            Rectangle {
+                id:colandSatReset
+                anchors.right:parent.right
+                anchors.bottom:parent.bottom
+                anchors.margins: 20
+                width:parent.width * 0.30
+                height:parent.height * 0.20
+                border.color:"lightgray"
+                color:"gray"
+                radius:8
+
+                Text {
+                    id:colandSatResettext
+                    text:qsTr("Reset")
+                    font.pixelSize: parent.height / 2
+                    anchors.centerIn: parent
+                    color:"white"
+                }
+                MouseArea {
+                    anchors.fill:parent
+                    hoverEnabled: true
+
+                    onClicked:sat.value = 0.0, col.value = 0.0, hideall()
+                }
+            }
+
+
+            Rectangle {
+                id:colandSatCancel
+                anchors.left:parent.left
+                anchors.bottom:parent.bottom
+                anchors.margins: 20
+                width:parent.width * 0.30
+                height:parent.height * 0.20
+                border.color:"lightgray"
+                color:"gray"
+                radius:8
+
+                Text {
+                    id:colandSatCanceltext
+                    text:qsTr("Close")
+                    font.pixelSize: parent.height / 2
+                    anchors.centerIn: parent
+                    color:"white"
+                }
+                MouseArea {
+                    anchors.fill:parent
+                    hoverEnabled: true
+
+                    onClicked: hideall()
+                }
+            }
+
+
+
+        }
+        Item {
+            id:briandCon
+            clip:true
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked:console.log("caught")
+            }
+
+            states: [
+                    State {
+                        name:"Show"
+                        PropertyChanges {
+                            target:briandCon
+                            y:effectsRow.height+effectsRow.y
+                        }
+
+
+                },
+                State {
+                    name:"Hide"
+                    PropertyChanges {
+                        target:briandCon
+                        y:window_container.height
+                    }
+                }
+            ]
+
+            state:"Hide"
+
+            width:parent.width
+            height:window_container.height - (effectsRow.y + effectsRow.height)
+
+            Rectangle {
+                anchors.fill:parent
+                color:"#202020"
+            }
+
+            Column {
+                anchors.top:parent.top
+                anchors.topMargin: parent.height * 0.1
+                width:parent.width
+                height:parent.height * 0.8
+                spacing: parent.height * 0.1
+
+                Image {
+
+                width:briandCon.height *0.2
+                height:briandCon.height * 0.2
+                source:"graphics/brightness.png"
+                fillMode: Image.PreserveAspectFit
+
+                Slider {
+                    id:bri
+                    to: 100
+                    from: -100
+                    width:(window_container.width - parent.width) * 0.9
+                    anchors.left:parent.right
+                    anchors.leftMargin:parent.height * 0.1
+                    anchors.verticalCenter: parent.verticalCenter
+                    height:briandCon.hieght * 0.5
+                    stepSize: 1
+
+                    value: 0
+                    onValueChanged: check.thebrightness = (value * 0.01)
+                }
+
+                }
+
+                Image {
+
+                width:briandCon.height *0.2
+                height:briandCon.height * 0.2
+                source:"graphics/contrast.png"
+                fillMode: Image.PreserveAspectFit
+
+                Slider {
+                    id:con
+                    to: 100
+                    from: -100
+                    width:(window_container.width - parent.width) * 0.9
+                    anchors.left:parent.right
+                    anchors.leftMargin:parent.height * 0.1
+                    anchors.verticalCenter: parent.verticalCenter
+                    height:briandCon.hieght * 0.5
+                    stepSize: 1
+
+                    value: 0
+                    onValueChanged: check.thecontrast = (value * 0.01)
+
+                }
+
+                }
+            }
+
+
+
+            Rectangle {
+                id:briConReset
+                anchors.right:parent.right
+                anchors.bottom:parent.bottom
+                anchors.margins: 20
+                width:parent.width * 0.30
+                height:parent.height * 0.20
+                border.color:"lightgray"
+                color:"gray"
+                radius:8
+
+                Text {
+                    id:briConResettext
+                    text:qsTr("Reset")
+                    font.pixelSize: parent.height / 2
+                    anchors.centerIn: parent
+                    color:"white"
+                }
+                MouseArea {
+                    anchors.fill:parent
+                    hoverEnabled: true
+
+                    onClicked:con.value = 0.0, bri.value = 0.0, hideall()
+                }
+            }
+
+            Rectangle {
+                id:briConCancel
+                anchors.left:parent.left
+                anchors.bottom:parent.bottom
+                anchors.margins: 20
+                width:parent.width * 0.30
+                height:parent.height * 0.20
+                border.color:"lightgray"
+                color:"gray"
+                radius:8
+
+                Text {
+                    id:briConResetCancel
+                    text:qsTr("Close")
+                    font.pixelSize: parent.height / 2
+                    anchors.centerIn: parent
+                    color:"white"
+                }
+                MouseArea {
+                    anchors.fill:parent
+                    hoverEnabled: true
+
+                    onClicked:hideall()
+                }
+            }
+
+
+
+        }
+
+        function hideall() {
+
+            briandCon.state = "Hide"
+            colandSat.state = "Hide"
+            thewizard.state = "Hide"
+            theoverlay.state = "Hide"
 
         }
 

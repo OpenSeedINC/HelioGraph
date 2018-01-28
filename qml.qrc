@@ -12,7 +12,6 @@
         <file>graphics/back.png</file>
         <file>graphics/blankimage.png</file>
         <file>graphics/cameraborder.png</file>
-        <file>main.js</file>
         <file>graphics/title.png</file>
         <file>graphics/patreon.png</file>
         <file>graphics/flattr.png</file>
@@ -24,7 +23,6 @@
         <file>graphics/search.png</file>
         <file>graphics/menu.png</file>
         <file>graphics/backbutton.png</file>
-        <file>openseed.js</file>
         <file>Auth.qml</file>
         <file>Preview.qml</file>
         <file>graphics/OpenSeed.png</file>
@@ -66,5 +64,44 @@
         <file>graphics/bordernew.png</file>
         <file>graphics/bordernew-10.png</file>
         <file>graphics/bordernew-25.png</file>
+        <file>LongPress.qml</file>
+        <file>Share.qml</file>
+        <file>graphics/add.svg</file>
+        <file>graphics/BaC.png</file>
+        <file>graphics/blank.png</file>
+        <file>graphics/brightness.png</file>
+        <file>graphics/CaS.png</file>
+        <file>graphics/comments.png</file>
+        <file>graphics/contrast.png</file>
+        <file>graphics/edit.svg</file>
+        <file>graphics/Hue.png</file>
+        <file>graphics/icon-512.png</file>
+        <file>graphics/imageborder-10.png</file>
+        <file>graphics/imageborder-25.png</file>
+        <file>graphics/instinct.png</file>
+        <file>graphics/jamendo.png</file>
+        <file>graphics/liked.png</file>
+        <file>graphics/liquids.svg</file>
+        <file>graphics/lock.png</file>
+        <file>graphics/mystic.png</file>
+        <file>graphics/overlay1.png</file>
+        <file>graphics/overlay2.png</file>
+        <file>graphics/overlay3.png</file>
+        <file>graphics/Overlay.png</file>
+        <file>graphics/OverLay.png</file>
+        <file>graphics/overlays.svg</file>
+        <file>graphics/rotate-right.svg</file>
+        <file>graphics/sat.png</file>
+        <file>graphics/save.svg</file>
+        <file>graphics/soundcloud.png</file>
+        <file>graphics/twitch-tv.png</file>
+        <file>graphics/valor.png</file>
+        <file>graphics/Wizard.png</file>
+        <file>graphics/youtube.png</file>
+        <file>Splash.qml</file>
+        <file>openseed.js</file>
+        <file>main.js</file>
+        <file>Following.qml</file>
+        <file>Inbox.qml</file>
     </qresource>
 </RCC>

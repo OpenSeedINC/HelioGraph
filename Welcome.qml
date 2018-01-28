@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.2
 import QtQuick.Controls 2.2
 import "main.js" as Scripts
 import "openseed.js" as OpenSeed
@@ -138,8 +138,8 @@ Rectangle {
 
             Text {
                     id:slidenum
-                    text:i18n.tr("Page:")+slidnum +"/"+ftext.count
-                    font.pixelSize: parent.height * 0.025
+                    text:qsTr("Page:")+slidnum +"/"+ftext.count
+                    font.pixelSize: parent.height * 0.030
                     width:parent.width
                     horizontalAlignment: Text.AlignHCenter
 
@@ -182,8 +182,8 @@ Rectangle {
 
         Text {
             anchors.centerIn: parent
-            text:"<-- Welcome -->"
-            font.pointSize: parent.height * 0.3
+            text:qsTr("<-- Welcome -->")
+            font.pointSize: if(parent.height > 0) {parent.height * 0.3} else {8}
             color:"white"
         }
 
@@ -208,7 +208,7 @@ Rectangle {
 
         Text {
             id:okaytext
-            text:"Okay"
+            text:qsTr("Okay")
             font.pixelSize: parent.height / 2
             anchors.centerIn: parent
         }
@@ -223,40 +223,9 @@ Rectangle {
     }
 
     Image {
-        //anchors.centerIn: parent
-        source:"graphics/bordernew.png"
-        //width:parent.width
-        //height:parent.height
-        x:0
-        y:0
-    }
-
-    Image {
-        //anchors.centerIn: parent
-        source:"graphics/bordernew.png"
-        //width:parent.width
-        //height:parent.height
-        x:parent.width-width
-        y:0
-        rotation:90
-    }
-
-    Image {
-        //anchors.centerIn: parent
-        source:"graphics/bordernew.png"
-        //width:parent.width
-        //height:parent.height
-        x:0
-        y:parent.height-height
-        rotation:270
-    }
-    Image {
-        //anchors.centerIn: parent
-        source:"graphics/bordernew.png"
-        //width:parent.width
-        //height:parent.height
-        x:parent.width-width
-        y:parent.height-height
-        rotation:180
+        anchors.centerIn: parent
+        width:parent.width * 1.01
+        height:parent.height * 1.01
+        source:"graphics/infoborder.png"
     }
 }

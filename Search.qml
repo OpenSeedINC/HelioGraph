@@ -1,6 +1,8 @@
-import QtQuick 2.0
+import QtQuick 2.2
+import QtQuick.Controls 2.2
+
 import QtGraphicalEffects 1.0
-import Ubuntu.Components 1.3
+
 
 import "openseed.js" as OpenSeed
 import "main.js" as Scripts
@@ -28,8 +30,8 @@ Item {
             anchors.top:parent.top
             anchors.topMargin:parent.height * 0.1
             color:"white"
-            text:"Search"
-            font.pointSize: parent.height * 0.1 - text.length
+            text:qsTr("Search")
+            font.pointSize: if(parent.height > 0) {parent.height * 0.1 - text.length} else {8}
         }
 
         TextField {
@@ -52,7 +54,7 @@ Item {
 
             Text {
                 id:okaytext
-                text:"Okay"
+                text:qsTr("Okay")
                 font.pixelSize: parent.height / 2
                 anchors.centerIn: parent
             }
@@ -65,13 +67,14 @@ Item {
                             if(searchtext.text != "") {
                                 progress.visible = true;
                                 progress.state = "midscreen";
-                                info = "Searching...";
+                                info = qsTr("Searching...");
                             searchstring = searchtext.text, popup.visible = false
                                 //Scripts.load_stream("any","any",searchstring)
                             } else {
                                 searchstring = " ", popup.visible = false
 
                             }
+                            postslist.clear();
 
                     if(whichview == 1) {
 
@@ -101,7 +104,7 @@ Item {
 
             Text {
                 id:canceltext
-                text:"Cancel"
+                text:qsTr("Cancel")
                 font.pixelSize: parent.height / 2
                 anchors.centerIn: parent
             }

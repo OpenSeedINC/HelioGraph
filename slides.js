@@ -5,8 +5,8 @@ function aboutslides(i18n){
 
     slidelist.append({
 
-                                 ftitle:i18n.tr("Welcome (1.0)"),
-                                 disc:i18n.tr('HelioGraph is a social photography application that uses your data connection to upload and download images from other users.'),
+                                 ftitle:i18n.tr("Welcome (1.8)"),
+                                 disc:i18n.tr('HelioGraph is a community funded (Patreon) social photography application: your pictures, your application, your network.'),
                                  pic:"graphics/blankimage.png",
                                  slidnum:1
 
@@ -92,6 +92,14 @@ function aboutslides(i18n){
 
                       });
 
+    slidelist.append({
+                     ftitle:i18n.tr("User Controls"),
+                     disc:i18n.tr("Long pressing on the image in your stream will bring up the controls for that User/Image. Whether you want to follow the user, or report some miss conduct you can do it at a (long)press of a button."),
+                     pic:"graphics/imageborder.png",
+                     slidnum:11
+
+                     });
+
 
 
     slidelist.append({
@@ -99,7 +107,7 @@ function aboutslides(i18n){
                                  ftitle:i18n.tr("Thank You"),
                                  disc:i18n.tr("If you have any issues or questions, don't hesitate to contact us via Patreon,Facebook,Twitter,or G+ (look for Vague Entertainment).HelioGraph is funded by the users, and is beholden ONLY to those who fund us. Consider becoming a patron to keep our servers running and our developer fed."),
                                  pic:"graphics/liked.png",
-                                 slidnum:11
+                                 slidnum:12
 
                       });
 
