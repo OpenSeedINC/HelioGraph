@@ -38,7 +38,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         text:qsTr("Settings")
         color:"white"
-        font.pointSize: if(parent.height > 0) {parent.height * 0.07} else {8}
+        font.pixelSize: parent.width * 0.07
 
     }
 
@@ -86,7 +86,8 @@ Item {
                 anchors.right:screennameedit.left
                 //text:qsTr("Screen Name")
                 text:if(publicname == " ") {qsTr("Screen Name")} else {publicname}
-                font.pointSize: if(parent.height > 0) {window_container.height * 0.04} else {8}
+                font.pixelSize: parent.width * 0.07
+
                 color:"white"
             }
 
@@ -140,7 +141,8 @@ Item {
                width:parent.width * 0.98
 
                wrapMode:Text.WordWrap
-               font.pointSize: if(parent.height > 0) {window_container.height * 0.015} else {8}
+               font.pixelSize: parent.width * 0.07
+
                text: qsTr("OpenSeed Account: ")+username
                id:lib
                color:"white"
@@ -162,7 +164,8 @@ Item {
 
             Text {
                 text:qsTr("Capture Settings")
-                font.pointSize: if(parent.height > 0) {window_container.height * 0.04} else {8}
+                font.pixelSize: parent.width * 0.07
+
                 color:"white"
             }
 
@@ -176,7 +179,8 @@ Item {
 
             Text {
                 text:qsTr("Default Publication")
-                font.pointSize: if(parent.height > 0) {window_container.height * 0.03} else {6}
+                font.pixelSize: parent.width * 0.07
+
                 color:"white"
             }
 
@@ -187,7 +191,8 @@ Item {
 
                 Text {
                     text:"Public: "
-                    font.pointSize: if(parent.height > 0) {window_container.height * 0.02} else {4}
+                    font.pixelSize: parent.width * 0.07
+
                     color:"white"
 
             CheckBox {
@@ -203,7 +208,8 @@ Item {
 
                 Text {
                     text:"Private: "
-                    font.pointSize: if(parent.height > 0) {window_container.height * 0.02} else {4}
+                    font.pixelSize: parent.width * 0.07
+
                     color:"white"
 
             CheckBox {
@@ -239,7 +245,8 @@ Item {
 
             Text {
                 text:qsTr("Fast Capture: ")
-                font.pointSize: if(parent.height > 0) {window_container.height * 0.025} else {5}
+                font.pixelSize: parent.width * 0.07
+
                 color:"white"
 
                 CheckBox {
@@ -256,7 +263,8 @@ Item {
                 wrapMode: Text.WordWrap
                 width:parent.width
                 text:qsTr("Fast Capture: The camera is set to a fixed focual mode (infinity) and skips the effects and comments dialog. The images are set as private for you to apply modifications at a later date.")
-                font.pointSize: if(parent.height > 0) {window_container.height * 0.01} else {6}
+                font.pixelSize: parent.width * 0.07
+
                 color:"white"
         }
 
@@ -273,7 +281,8 @@ Item {
 
             Text {
                 text:qsTr("View Settings")
-                font.pointSize: if(parent.height > 0) {window_container.height * 0.04} else {8}
+                font.pixelSize: parent.width * 0.07
+
                 color:"white"
             }
 
@@ -288,7 +297,8 @@ Item {
 
             Text {
                 text:qsTr("Maxium Rating")
-                font.pointSize: if(parent.height > 0) {window_container.height * 0.03} else {6}
+                font.pixelSize: parent.width * 0.07
+
                 color:"white"
             }
 
@@ -408,7 +418,8 @@ Item {
 
             Text {
                 text:qsTr("Override Pin")
-                font.pointSize: if(parent.height > 0) {window_container.height * 0.03} else {6}
+                font.pixelSize: parent.width * 0.07
+
                 color:"white"
             }
 
@@ -435,7 +446,8 @@ Item {
                 id:grouptitle
                 text:qsTr("Groups:")
                 width:parent.width * 0.89
-                font.pointSize: if(parent.height > 0) {window_container.height * 0.04} else {8}
+                font.pixelSize: parent.width * 0.07
+
                 color:"white"
 
             Rectangle {
@@ -492,7 +504,8 @@ Item {
                             anchors.leftMargin:parent.height * 0.1
                             text:name
                             width:parent.width * 0.1
-                            font.pointSize: if(parent.height > 0) {window_container.height * 0.03} else {8}
+                            font.pixelSize: parent.width * 0.07
+
                             color:"white"
 
                         }
@@ -652,7 +665,8 @@ Item {
 
             Text {
                 text:qsTr("External Accounts")
-                font.pointSize: if(parent.height > 0) {window_container.height * 0.04} else {8}
+                font.pixelSize: parent.width * 0.07
+
                 color:"white"
             }
 
@@ -673,7 +687,8 @@ Item {
             Text {
                 id:accountname1
                 text:qsTr("Flattr: ")
-                font.pointSize: if(parent.height > 0) {window_container.height * 0.03} else {8}
+                font.pixelSize: parent.width * 0.07
+
                 color:"white"
             }
 
@@ -682,7 +697,8 @@ Item {
                 anchors.verticalCenter: accountname1.verticalCenter
                 anchors.right:accountname1edit.left
                 text:if(flattr == "" || flattr == " ") {"No account"} else {flattr}
-                font.pointSize: if(parent.height > 0) {window_container.height * 0.03} else {8}
+                font.pixelSize: parent.width * 0.07
+
                 color:"white"
                 id:account1
             }
@@ -732,7 +748,8 @@ Item {
             Text {
                 id:accountname2
                 text:qsTr("Patreon: ")
-                font.pointSize: if(parent.height > 0) {window_container.height * 0.03} else {8}
+                font.pixelSize: parent.width * 0.07
+
                 color:"white"
             }
 
@@ -741,7 +758,8 @@ Item {
                 anchors.verticalCenter: accountname2.verticalCenter
                 anchors.right:accountname2edit.left
                 text:if(patreon == "" || patreon == " ") {"No account"} else {patreon}
-                font.pointSize: if(parent.height > 0) {window_container.height * 0.03} else {8}
+                font.pixelSize: parent.width * 0.07
+
                 color:"white"
                 id:account2
             }

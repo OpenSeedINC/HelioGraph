@@ -1,11 +1,11 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
-import QtQuick.Window 2.0
-import QtPositioning 5.2
+import QtQuick.Window 2.3
+import QtPositioning 5.8
 import QtQuick.Controls.Material 2.2
 import QtGraphicalEffects 1.0
-import QtSensors 5.3
+import QtSensors 5.9
 
 import IO 1.0
 

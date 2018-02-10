@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.9
 import QtMultimedia 5.9
 import QtGraphicalEffects 1.0
 import QtQuick.Controls 2.2
@@ -28,10 +28,12 @@ Item {
     property int capturedAsspect:0
     property int setFlash:0
     property int setExpos:0
-    property int setFocus: 0
+    property int setFocus:0
     property int privacy:privsetting
     property int rating:0
     property int fromhub:0
+
+    property int rotate:0
 
     property string theComment:""
 
@@ -145,7 +147,7 @@ clip:true
     Camera {
             id:camera
 
-
+           // position: Camera.BackFace
 
             imageProcessing {
 
@@ -173,7 +175,7 @@ clip:true
                                    case 2:Camera.FocusHyperfocal;break;
                                    case 3:Camera.FocusInfinity;break;
                                    case 4:Camera.FocusMacro;break;
-                                   default:Camera.FocusAuto;break;
+                                   default:Camera.FocusContinuous;break;
 
                                    }
                         focusPointMode: Camera.FocusPointAuto
@@ -236,7 +238,19 @@ clip:true
 
 
 
+      /*  MouseArea {
+            anchors.fill: parent
+            onClicked: {
 
+                            switch(rotate){
+                            case 0: rotate = 90;parent.rotation = rotate;console.log(rotate);break;
+                            case 90: rotate = 180;parent.rotation = rotate;console.log(rotate);break;
+                            case 180: rotate = 270;parent.rotation = rotate;console.log(rotate);break;
+                            case 270: rotate = 360;parent.rotation = rotate;console.log(rotate);break;
+                            default: rotate = 0;parent.rotation = rotate;console.log(rotate);break;
+                           }
+                       }
+        } */
         }
 
     Rectangle {
